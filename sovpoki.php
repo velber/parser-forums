@@ -1,7 +1,9 @@
 <?php
 
+
 namespace Models;
 
+// TODO find all themes with more than 1 page, and parse them, than fix  parser for availability parse this pages
 $client = new \GuzzleHttp\Client();
 
 parseLinks($client);
@@ -61,7 +63,7 @@ function parseLinks($client)
     $links = array();
 
     // for every page
-    for ($i = 0; $i <= 1700; $i += 25) {
+    for ($i = 100; $i <= 200; $i += 25) {
 
         $res = $client->request('GET', 'http://sovpoki.ru/viewforum.php?f=25&start=' . $i);
 
