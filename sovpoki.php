@@ -21,7 +21,13 @@ function parseEmails($client)
     // foreach theme id
     foreach ($linksNumbers as $key => $linksNumber) {
 
-        echo $key . '<br>';
+        echo <<<HEREDOC
+        <br>
+        ====================================<br>
+        --- №$key. THEME: $linksNumber -----<br>
+        ====================================<br>
+HEREDOC;
+
         flush();
         ob_flush();
 
@@ -46,8 +52,48 @@ function parseEmails($client)
 
         // insert into db emails from theme
         $emailsFromForums->insertByArray($emailsRow, 'sovpoki');
-        sleep(3);
-        // exit;
+        sleep(5);
+
+        // check if theme has more than 1 page
+        $pages = $saw->get('.bottom .pagination li a')->toArray();
+
+        if (count($pages) > 0) {
+
+            // filter links, leave only emails
+            $pagesFiltred = array_map(function($node) {
+
+                return filter_var($node['#text'][0], FILTER_VALIDATE_INT);
+            }, $pages);
+
+            // delete null values
+            $pagesFiltred = array_filter($pagesFiltred);
+            $maxPage = max($pagesFiltred) * 20;
+
+            // for every page
+            for ($i = 20; $i < $maxPage; $i += 20) {
+                printf("<br>-------- №%s. theme:%s, page: %s -------<br>", $key, $linksNumber, $i / 20);
+                $res = $client->request('GET', $link . '&start=' . $i);
+
+                $saw = new \nokogiri($res->getBody());
+                $nodes = $saw->get('.post .inner .postbody .content>a')->toArray();
+
+                // filter links, leave only emails
+                $emailsRow = array_map(function($node) {
+
+                    return filter_var($node['#text'][0], FILTER_VALIDATE_EMAIL);
+                }, $nodes);
+
+                // delete null values
+                $emailsRow = array_filter($emailsRow);
+
+                // insert into db emails from theme
+                $emailsFromForums->insertByArray($emailsRow, 'sovpoki');
+
+                flush();
+                ob_flush();
+                sleep(5);
+            }
+        }
     }
 
     echo 'DONE!';
@@ -63,7 +109,7 @@ function parseLinks($client)
     $links = array();
 
     // for every page
-    for ($i = 100; $i <= 200; $i += 25) {
+    for ($i = 0; $i <= 500; $i += 25) {
 
         $res = $client->request('GET', 'http://sovpoki.ru/viewforum.php?f=25&start=' . $i);
 
