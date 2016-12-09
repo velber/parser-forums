@@ -87,8 +87,8 @@ HEREDOC;
 
             // filter links, leave only emails
             $emailsRow = array_map(function($node) {
-                preg_match('/[A-Za-z\d._%+-]+@[a-z\d.-]+\.[a-z]{2,4}\b/', $node, $matches);
-                return @$matches[0];
+                preg_match(self::EMAIL_REGEXP, $node, $matches);
+                return filter_var(@$matches[0], FILTER_VALIDATE_EMAIL);
             }, $nodes);
 
             // delete null values
@@ -123,7 +123,7 @@ HEREDOC;
                     // filter links, leave only emails
                     $emailsRow = array_map(function($node) {
                         preg_match(self::EMAIL_REGEXP, $node, $matches);
-                        return @$matches[0];
+                        return filter_var(@$matches[0], FILTER_VALIDATE_EMAIL);;
                     }, $nodes);
 
                     // delete null values
