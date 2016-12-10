@@ -14,6 +14,8 @@ class ForumAbstract
     const LINKS_FILE_NAME = 'links-';
     const EMAIL_REGEXP = '/[A-Za-z\d._%+-]+@[a-z\d.-]+\.[a-z]{2,4}\b/';
 
+    public $id;
+
     protected $client;
 
     protected $forum;

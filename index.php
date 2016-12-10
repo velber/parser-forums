@@ -10,10 +10,14 @@ $forum = filter_input(INPUT_GET, 'forum', FILTER_SANITIZE_STRING);
 
 if ($forum) {
     $forumParser = \Models\ForumFactory::factory($forum);
-    // $forumParser->parseLinks();
+//    $forumParser->parseLinks();
     $forumParser->parseEmails();
 } else {
     echo <<<HTML
-        <a href="/?forum=biz-net">biz-net.kiev.ua</a>
+    <ul>
+        <li><a href="/?forum=biz-net">biz-net.kiev.ua</a></li>
+        <li><a href="/?forum=sovpoki">sovpoki</a></li>
+        <li><a href="/?forum=odezdaoptom">odezdaoptom</a></li>
+    </ul>        
 HTML;
 }

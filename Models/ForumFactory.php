@@ -19,6 +19,13 @@ class ForumFactory
             case 'biz-net':
                 self::$instance = new ForumBizNet($url);
                 break;
+            case 'sovpoki':
+                self::$instance = new ForumSovPoki($url);
+                break;
+            case 'odezdaoptom':
+                self::$instance = new ForumOdezdaOptom($url);
+                self::$instance->id = 3;
+                break;
         }
 
         return self::$instance;
