@@ -28,7 +28,7 @@ class ForumOdezdaOptom extends ForumAbstract
 
         // foreach theme id
         foreach ($topics as $key => $topic) {
-            if ($key < 374) continue; // 13484 (17418)
+            // if ($key < 16615) continue; // (17418)
 
             echo <<<HEREDOC
         <br>
